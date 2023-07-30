@@ -1,0 +1,100 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="romario" id="0000-0000-0001">
+        <createTable tableName="clients">
+            <column name="person_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="clients_pkey"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="romario" id="0000-0000-0002">
+        <createTable tableName="persons">
+            <column name="person_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="persons_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="age" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identification" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="direction" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="romario" id="0000-0000-0003">
+        <createTable tableName="bank_accounts">
+            <column name="bank_account_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="bank_accounts_pkey"/>
+            </column>
+            <column name="number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initial_balance" type="numeric(16, 6)" defaultValueComputed="0.00">
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="UUID"></column>
+        </createTable>
+    </changeSet>
+    <changeSet author="romario" id="0000-0000-0004">
+        <createTable tableName="movements">
+            <column name="movement_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="movements_pkey"/>
+            </column>
+            <column name="date" type="TIMESTAMP"></column>
+            <column name="movement_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="numeric(16, 6)" defaultValueComputed="0.00">
+            </column>
+            <column name="balance" type="numeric(16, 6)" defaultValueComputed="0.00">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bank_account_id" type="UUID"></column>
+        </createTable>
+    </changeSet>
+    <changeSet author="romario" id="0000-0000-0005">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="clients"
+                                 constraintName="fk_client_person" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="person_id"
+                                 referencedTableName="persons" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="bank_accounts"
+                                 constraintName="fk_bank_accounts_client" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="person_id"
+                                 referencedTableName="clients" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="bank_account_id" baseTableName="movements"
+                                 constraintName="fk_movements_bank_account" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="bank_account_id"
+                                 referencedTableName="bank_accounts" validate="true"/>
+
+
+    </changeSet>
+</databaseChangeLog>
